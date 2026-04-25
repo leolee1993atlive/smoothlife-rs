@@ -36,8 +36,8 @@ The simulation starts from a random grid and evolves indefinitely, printing each
 
 ## References
 
+- [Tsoding's SmoothLife](https://github.com/tsoding/SmoothLife) — the GLSL implementation this project is ported from
 - Stephan Rafler, "Generalization of Conway's 'Game of Life' to a continuous domain" — the original SmoothLife paper
-- Tutorial series that inspired this implementation
 
 ## License
 
