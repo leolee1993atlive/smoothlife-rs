@@ -9,11 +9,11 @@ const RA: usize = 21;
 const RI: usize = RA / 3;
 const ALPHA_N: f32 = 0.028;
 const ALPHA_M: f32 = 0.147;
-const B1: f32 = 0.278;
-const D1: f32 = 0.267;
-const B2: f32 = 0.365;
-const D2: f32 = 0.445;
-const DT: f32 = 0.01;
+const B1: f32 = 0.257;
+const D1: f32 = 0.365;
+const B2: f32 = 0.336;
+const D2: f32 = 0.549;
+const DT: f32 = 0.05;
 
 const LEVEL: &[u8] = " .-=co*&@#".as_bytes();
 
