@@ -86,12 +86,12 @@ fn create_image(grid: &Grid) -> Image {
             for x in 0..WIDTH as usize {
                 let current = grid.current[y][x];
 
-                let (r, g, b, a) = if (current > 0.0) {
-                    let hue = current * 360.0;
-                    let (r, g, b) = hsl_to_rgb_u8(hue, 0.8, 0.6);
+                let (r, g, b, a) = if current > 0.0 {
+                    let hue = (1.0 - current) * 240.0; // 240°(蓝) ~ 0°(红)
+                    let (r, g, b) = hsl_to_rgb_u8(hue, 0.9, 0.3 + current * 0.4);
                     (r, g, b, 255u8)
                 } else {
-                    (20u8, 20u8, 30u8, 255u8)
+                    (0u8, 0u8, 0u8, 255u8)
                 };
 
                 pixel_data.push(r);
