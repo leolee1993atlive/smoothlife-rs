@@ -1,4 +1,5 @@
 mod smoothlife_bevy;
+mod smoothlife_core;
 mod smoothlife_term;
 
 fn main() {
