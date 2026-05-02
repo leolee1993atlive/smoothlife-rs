@@ -48,7 +48,7 @@ pub fn run() {
             SmoothLifeComputePlugin,
         ))
         .add_systems(Startup, setup)
-        .add_systems(Update, switch_textures)
+        .add_systems(Update, (switch_textures, update_brush))
         .run();
 }
 
@@ -79,7 +79,31 @@ fn setup(mut commands: Commands, mut images: ResMut<Assets<Image>>) {
 
     commands.insert_resource(SmoothLifeUniforms {
         alive_color: LinearRgba::RED,
+        brush_x: 0.0,
+        brush_y: 0.0,
+        brush_radius: 12.0, // 纹理像素半径
+        brush_state: -1.0,
     });
+}
+
+fn update_brush(
+    mut uniforms: ResMut<SmoothLifeUniforms>,
+    mouse_buttons: Res<ButtonInput<MouseButton>>,
+    window: Single<&Window>,
+) {
+    let left = mouse_buttons.pressed(MouseButton::Left);
+    let right = mouse_buttons.pressed(MouseButton::Right);
+
+    if left || right {
+        if let Some(pos) = window.cursor_position() {
+            // 窗口坐标 / DISPLAY_FACTOR = 纹理坐标
+            uniforms.brush_x = pos.x / DISPLAY_FACTOR as f32;
+            uniforms.brush_y = pos.y / DISPLAY_FACTOR as f32;
+            uniforms.brush_state = if left { 1.0 } else { 0.0 };
+        }
+    } else {
+        uniforms.brush_state = -1.0;
+    }
 }
 
 fn switch_textures(images: Res<SmoothLifeImages>, mut sprite: Single<&mut Sprite>) {
@@ -102,6 +126,10 @@ struct SmoothLifeImages {
 #[derive(Resource, Clone, ExtractResource, ShaderType)]
 struct SmoothLifeUniforms {
     alive_color: LinearRgba,
+    brush_x: f32,
+    brush_y: f32,
+    brush_radius: f32,
+    brush_state: f32, // -1.0=不活跃, 0.0=消除, 1.0=种植
 }
 
 enum SmoothLifeState {

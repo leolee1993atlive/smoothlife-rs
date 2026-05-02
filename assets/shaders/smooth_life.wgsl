@@ -7,6 +7,10 @@
 
 struct SmoothLifeUniforms {
     alive_color: vec4<f32>,
+    brush_x: f32,
+    brush_y: f32,
+    brush_radius: f32,
+    brush_state: f32,  // -1.0=不活跃, 0.0=消除, 1.0=种植
 }
 
 const RA: i32 = 21;
@@ -17,7 +21,7 @@ const B1: f32 = 0.257;
 const D1: f32 = 0.365;
 const B2: f32 = 0.336;
 const D2: f32 = 0.549;
-const DT: f32 = 0.05;
+const DT: f32 = 0.02;
 
 fn hash(value: u32) -> u32 {
     var state = value;
@@ -131,6 +135,12 @@ fn update(@builtin(global_invocation_id) invocation_id: vec3<u32>) {
     let diff = 2.0 * s(n, m) - 1.0;
     let new_state = clamp(current + DT * diff, 0.0, 1.0);
 
-    let color = pixel_color(new_state);
-    textureStore(output, location, color);
+    // 笔刷覆写：在笔刷圆形范围内直接种植或消除生命
+    let bdx = f32(location.x) - config.brush_x;
+    let bdy = f32(location.y) - config.brush_y;
+    let in_brush = config.brush_state >= 0.0
+        && bdx * bdx + bdy * bdy <= config.brush_radius * config.brush_radius;
+
+    let final_state = select(new_state, config.brush_state, in_brush);
+    textureStore(output, location, pixel_color(final_state));
 }
