@@ -8,7 +8,7 @@ pub const B1: f32 = 0.257;
 pub const D1: f32 = 0.365;
 pub const B2: f32 = 0.336;
 pub const D2: f32 = 0.549;
-pub const DT: f32 = 0.05;
+pub const DT: f32 = 0.02;
 
 fn sigam1_n(x: f32, a: f32) -> f32 {
     1.0 / (1.0 + (-(x - a) * 4.0 / ALPHA_N).exp())

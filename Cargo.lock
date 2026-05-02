@@ -4584,6 +4584,7 @@ dependencies = [
  "log",
  "rand 0.10.1",
  "rayon",
+ "thiserror 2.0.18",
 ]
 
 [[package]]
